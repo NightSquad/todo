@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="content">
+        <form action="#" id="forma" name="myForm">
+            <fieldset class="addTask">
+                <legend>Задача</legend>
+                <label for="task__title">Заголовок</label><input id='task__title'type="text" class="addTaskInput">
+                <label for="task__description">Описание</label><input id='task__description' type="text" class="addTaskInput">
+                <label for="taskDate">Дата выполнения</label><input id='taskDate' type="datetime-local" class="addTaskInput"  min="2017-06-01T08:30" max="2023-06-30T16:30">
+                <label for="taskPriority">Приоритет</label><select name="taskPriority" id="taskPriority" class="addTaskInput">
+                    <option value="high">Высокий</option>
+                    <option value="medium">Средний</option>
+                    <option value="low">Низкий</option>
+                </select>
+                <label for="taskProject">Проект</label><select name="taskProject" id="taskProject" class="addTaskInput" >
+                    <option value="0">Проект1</option>
+                    <option value="1">Проект2</option>
+                    <option value="new">Новый</option>
+                </select>
+                <div id='projectTitleInput'>
+                    <label for="projectTitle">Заголовок проекта</label><input id='projectTitle'type="text" class="addTaskInput">
+                </div>
+                <button type="submit" class="createTaskButton">Создать</button>
+            </fieldset>
+        </form>
+    </div>
+    <div class="projectList">
+        <div class="project">
+            <div class="projectTitle"><p>Проект1</p><button class="projectViewButton">></button></div>
+            <div class="taskList" id="tasks">
+                <div class="task medium">
+                    <p class="taskTitle">Купить пельмени</p>
+                    <p class="taskDescription">Пойти в магазин и купить себе пачку сочных пельмешей</p>
+                    <p class="taskDate">2022.21.13 22:22</p>
+                </div>
+                <div class="task high">
+                    <p class="taskTitle">Купить пельмени</p>
+                    <p class="taskDescription">Пойти в магазин и купить себе пачку сочных пельмешей</p>
+                    <p class="taskDate">2022.21.13 22:22</p>
+                </div>
+            </div>
+        </div>
+        <div class="project">
+            <div class="projectTitle"><p>Проект2</p><button class="projectViewButton">></button></div>
+            <div class="taskList" id="tasks">
+                <div class="task medium">
+                    <p class="taskTitle">Купить пельмени</p>
+                    <p class="taskDescription">Пойти в магазин и купить себе пачку сочных пельмешей</p>
+                    <p class="taskDate">2022.21.13 22:22</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="main.js"></script>
+</html>
