@@ -113,13 +113,19 @@ function searchToDoInProjects(obj) {
 class todoItem {
     constructor(title, description, date, priority) {
         this._title = title;
-        this.description = description;
-        this.date = date;
-        this.priority = priority;
+        this._description = description;
+        this._date = date;
+        this._priority = priority;
     }
 
     get title(){
         return this._title
+    }
+    get description(){
+        return this._description
+    }
+    get date(){
+        return this._date
     }
 
     edit(e) {
@@ -132,7 +138,7 @@ class todoItem {
         let project = document.getElementById(title);
         let taskList = project.getElementsByClassName('taskList')[0];
         let task = document.createElement('div');
-        task.classList.add('task', this.priority);
+        task.classList.add('task', this._priority);
         task.setAttribute('name', this._title)
 
         let taskTitle = document.createElement('input');
@@ -144,7 +150,7 @@ class todoItem {
         })
 
         let taskDescription = document.createElement('input');
-        taskDescription.value = this.description;
+        taskDescription.value = this._description;
         taskDescription.className = 'taskDescription';
         taskDescription.addEventListener('blur', (e) => {
             this.description = e.currentTarget.value
@@ -152,7 +158,7 @@ class todoItem {
         })
 
         let taskDate = document.createElement('input');
-        taskDate.value = this.date;
+        taskDate.value = this._date;
         taskDate.className = 'taskDate';
         taskDate.addEventListener('blur', (e) => {
             this.date = e.currentTarget.value
@@ -181,9 +187,9 @@ class todoItem {
         select.options[2] = new Option('Низкий', 'low');  
         select.style.display = 'none'
         select.addEventListener('change', () => {
-            task.classList.remove(this.priority);
-            this.priority = select.value;
-            task.classList.add(this.priority);
+            task.classList.remove(this._priority);
+            this._priority = select.value;
+            task.classList.add(this._priority);
             localStorage.setItem(0, JSON.stringify(projects))
         })
         select.addEventListener('blur', () => {
@@ -206,7 +212,7 @@ if (localStorage.length > 0) {
     cache.forEach(el => {
         let cacheProject = new project(el._title)
             el._todos.forEach(element => {
-                let cacheToDo = new todoItem(element._title, element.description, element.date, element.priority);
+                let cacheToDo = new todoItem(element._title, element._description, element._date, element._priority);
                 cacheProject.addToDO(cacheToDo)
             })
         cacheProject.render();
