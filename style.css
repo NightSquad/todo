@@ -40,6 +40,10 @@ body {
     transform: rotate(90deg);
 }
 
+.displaynone {
+    display: none;
+}
+
 .test {
     background: none;
     border: none;

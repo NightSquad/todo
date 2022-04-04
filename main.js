@@ -1,4 +1,5 @@
-const projects = [];
+let projects = []
+let projectSelect = document.getElementById('taskProject');
 
 const form = document.getElementById('forma');
 form.addEventListener('submit', (e) => {
@@ -7,7 +8,6 @@ form.addEventListener('submit', (e) => {
     let description = document.getElementById('task__description').value;
     let date = document.getElementById('taskDate').value;
     let priority = document.getElementById('taskPriority').value;
-    let projectSelect = document.getElementById('taskProject');
     let projectTitle = document.getElementById('projectTitle').value;
 
     date = date.split("T");
@@ -15,9 +15,9 @@ form.addEventListener('submit', (e) => {
     if (projectSelect.value == 'new') {
         let newProject = new project(projectTitle);
         let item = new todoItem(title, description, date[0] + ' ' + date[1], priority);
+        projects.push(newProject);
         newProject.addToDO(item);
         newProject.render();
-        projects.push(newProject);
         projectSelect.options[projects.length] = new Option(projectTitle, projects.length - 1);
         projectSelect.options[projects.length].selected = 'selected'
         let input = document.getElementById('projectTitleInput');
@@ -25,7 +25,7 @@ form.addEventListener('submit', (e) => {
         return
     }
 
-    let item = new todoItem(title, description, date, priority);
+    let item = new todoItem(title, description, date[0] + ' ' + date[1], priority);
     projects[projectSelect.value].addToDO(item);
     item.render(projects[projectSelect.value].title)
 })
@@ -53,6 +53,7 @@ class project{
 
     addToDO(item) {
         this._todos.push(item);
+        localStorage.setItem(0, JSON.stringify(projects))
     }
 
     switchState(e) {
@@ -65,6 +66,11 @@ class project{
         }
         taskList.style.display = 'block';
         e.currentTarget.classList.add('rotate');
+    }
+
+    removeToDo(i) {
+        this._todos.splice(i, 1)
+        localStorage.setItem(0, JSON.stringify(projects))
     }
 
     render() {
@@ -83,12 +89,25 @@ class project{
         projectTitleDiv.append(projectTitle, projectTitleButton);
         let projectTasksList = document.createElement('div');
         projectTasksList.className = 'taskList'; 
+        projectTasksList.style.display = 'none';
         project.append(projectTitleDiv, projectTasksList);
         projectList.append(project)
         this._todos.forEach(element => {
             element.render(this._title);
         })
     }
+}
+
+function searchToDoInProjects(obj) {
+    for (let i=0; i < projects.length; i++) {
+        if (projects[i].todos.indexOf(obj) > -1) {
+            return {
+                projectIndex:i,
+                toDoIndex: projects[i].todos.indexOf(obj)
+            }
+        }
+    }
+    return false
 }
 
 class todoItem {
@@ -105,23 +124,8 @@ class todoItem {
 
     edit(e) {
         let parent = e.currentTarget.parentElement;
-        let item = e.currentTarget;
-        item.style.display = 'none';
-        let select = document.createElement('select');
-        select.options[0] = new Option('Высокий', 'high')
-        select.options[1] = new Option('Средний', 'medium') 
-        select.options[2] = new Option('Низкий', 'low')  
-        select.addEventListener('change', () => {
-            let task = parent.parentElement
-            task.classList.remove(this.priority);
-            this.priority = select.value;
-            task.classList.add(this.priority);
-        })
-        select.addEventListener('blur', () => {
-            item.style.display = 'block';
-            select.remove();
-        })
-        parent.append(select)
+        let select = parent.getElementsByTagName('select')[0];
+        select.style.display = 'block'
     }
 
     render(title) {
@@ -134,30 +138,80 @@ class todoItem {
         let taskTitle = document.createElement('input');
         taskTitle.className = 'taskTitle';
         taskTitle.value = this._title;
-        taskTitle.addEventListener('blur', (e) => {this._title = e.currentTarget.value})
+        taskTitle.addEventListener('blur', (e) => {
+            this._title = e.currentTarget.value
+            localStorage.setItem(0, JSON.stringify(projects))
+        })
 
         let taskDescription = document.createElement('input');
         taskDescription.value = this.description;
         taskDescription.className = 'taskDescription';
-        taskDescription.addEventListener('blur', (e) => {this.description = e.currentTarget.value})
+        taskDescription.addEventListener('blur', (e) => {
+            this.description = e.currentTarget.value
+            localStorage.setItem(0, JSON.stringify(projects))
+        })
 
         let taskDate = document.createElement('input');
         taskDate.value = this.date;
         taskDate.className = 'taskDate';
-        taskDate.addEventListener('blur', (e) => {this.date = e.currentTarget.value})
+        taskDate.addEventListener('blur', (e) => {
+            this.date = e.currentTarget.value
+            localStorage.setItem(0, JSON.stringify(projects))
+        })
 
         let editButton = document.createElement('button')
         editButton.innerHTML = '<i class="fa-solid fa-pen"></i>';
         editButton.className = 'taskEdit';
         editButton.addEventListener('click', (e) => {this.edit(e)})
 
+        let deleteButton = document.createElement('button')
+        deleteButton.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+        deleteButton.className = 'taskEdit';
+        deleteButton.addEventListener('click', (e) => {
+            if (typeof searchToDoInProjects(this) == 'object') {
+                let indexes = searchToDoInProjects(this);
+                projects[indexes['projectIndex']].removeToDo(indexes['toDoIndex']);
+                task.remove()
+            }
+        })
+
+        let select = document.createElement('select');
+        select.options[0] = new Option('Высокий', 'high');
+        select.options[1] = new Option('Средний', 'medium');
+        select.options[2] = new Option('Низкий', 'low');  
+        select.style.display = 'none'
+        select.addEventListener('change', () => {
+            task.classList.remove(this.priority);
+            this.priority = select.value;
+            task.classList.add(this.priority);
+            localStorage.setItem(0, JSON.stringify(projects))
+        })
+        select.addEventListener('blur', () => {
+            select.style.display = 'none'
+        })
+
         let editPriority = document.createElement('div');
         editPriority.className = 'editPriority';
 
-        editPriority.append(editButton)
+        editPriority.append(editButton, deleteButton, select)
 
         task.append(taskTitle, taskDescription, taskDate, editPriority);
         taskList.append(task);
         return task
     }
 };
+
+if (localStorage.length > 0) {
+    let cache = JSON.parse(localStorage.getItem(0));
+    cache.forEach(el => {
+        let cacheProject = new project(el._title)
+            el._todos.forEach(element => {
+                let cacheToDo = new todoItem(element._title, element.description, element.date, element.priority);
+                cacheProject.addToDO(cacheToDo)
+            })
+        cacheProject.render();
+        projects.push(cacheProject)
+        projectSelect.options[projects.length] = new Option(el._title, projects.length - 1);
+        localStorage.setItem(0, JSON.stringify(projects))
+    })
+}
