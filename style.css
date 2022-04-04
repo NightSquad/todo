@@ -33,11 +33,47 @@ body {
     transition: 0.1s ease all;
     height: 25px;
     align-self: center;
+    transition: 0.1s ease all;
 }
 
-.projectViewButton:focus {
-    transition: 0.1s ease all;
+.rotate {
     transform: rotate(90deg);
+}
+
+.test {
+    background: none;
+    border: none;
+    font-size: 25px;
+    color: red;
+}
+
+.taskEdit {
+    display: none;
+    background: none;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.editPriority {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.task:hover .taskEdit {
+    display: block;
+}
+
+/* .taskList {
+    display: none;
+} */
+
+.projectViewButton:focus .taskList{
+    display: block;
 }
 
 .addTask {
@@ -71,7 +107,7 @@ body {
     color: white;
 }
 
-.addTaskInput:focus {
+.addTaskInput:focus{
     outline: none;
 }
 
@@ -99,6 +135,7 @@ body {
     justify-content: space-between;
     align-items: center;
     border-radius: 5px;
+    position: relative;
 }
 
 .high {
@@ -127,6 +164,13 @@ body {
 .taskDate {
     margin: 5px 0 0 0;
     font-style: italic;
+}
+
+.taskTitle, .taskDescription, .taskDate {
+    background: none;
+    border: none;
+    text-align: center;
+    color: white;
 }
 
 /* .task:hover .taskContent {
