@@ -13,9 +13,9 @@
         <form action="#" id="forma" name="myForm">
             <fieldset class="addTask">
                 <legend>Задача</legend>
-                <label for="task__title">Заголовок</label><input id='task__title'type="text" class="addTaskInput">
-                <label for="task__description">Описание</label><input id='task__description' type="text" class="addTaskInput">
-                <label for="taskDate">Дата выполнения</label><input id='taskDate' type="datetime-local" class="addTaskInput"  min="2017-06-01T08:30" max="2023-06-30T16:30">
+                <label for="task__title">Заголовок</label><input required id='task__title'type="text" class="addTaskInput">
+                <label for="task__description">Описание</label><input required id='task__description' type="text" class="addTaskInput">
+                <label for="taskDate">Дата выполнения</label><input required id='taskDate' type="datetime-local" class="addTaskInput"  min="2017-06-01T08:30" max="2023-06-30T16:30">
                 <label for="taskPriority">Приоритет</label><select name="taskPriority" id="taskPriority" class="addTaskInput">
                     <option value="high">Высокий</option>
                     <option value="medium">Средний</option>

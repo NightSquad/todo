@@ -153,7 +153,7 @@ class todoItem {
         taskDescription.value = this._description;
         taskDescription.className = 'taskDescription';
         taskDescription.addEventListener('blur', (e) => {
-            this.description = e.currentTarget.value
+            this.description = e.currentTaret.value
             localStorage.setItem(0, JSON.stringify(projects))
         })
 

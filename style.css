@@ -40,6 +40,10 @@ body {
     transform: rotate(90deg);
 }
 
+input:invalid {
+    border: 1px solid red;
+}
+
 .displaynone {
     display: none;
 }
